@@ -40,7 +40,7 @@ export default function Home() {
           🤖 Kimi AI Agent
         </h1>
         <p style={{ textAlign: 'center', color: '#666', marginBottom: '24px', fontSize: '14px' }}>
-          Powered by Google Gemma 2 (free tier)
+          Powered by Mistral 7B (free tier)
         </p>
         
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
@@ -86,7 +86,7 @@ export default function Home() {
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             whiteSpace: 'pre-wrap'
           }}>
-            <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Kimi (via Gemma) says:</p>
+            <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Kimi (via Mistral) says:</p>
             <p>{response}</p>
           </div>
         )}

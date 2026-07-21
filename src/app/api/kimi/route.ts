@@ -4,7 +4,6 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
-    // Using Google's Gemma 2 - free and works well
     const response = await fetch(
       'https://openrouter.ai/api/v1/chat/completions',
       {
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
           'X-Title': 'CTO Test App',
         },
         body: JSON.stringify({
-          model: 'google/gemma-2-9b-it:free',
+          model: 'mistralai/mistral-7b-instruct:free',
           messages: [{ role: 'user', content: message }],
           max_tokens: 512,
         }),
