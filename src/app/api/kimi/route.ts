@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
-    // Try the correct Kimi model name
+    // CORRECT Cloudflare Workers AI endpoint
     const response = await fetch(
       `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/moonshotai/kimi-k2`,
       {
@@ -22,11 +22,10 @@ export async function POST(req: NextRequest) {
     
     const data = await response.json()
     
-    // Better error handling
     if (!response.ok) {
       return NextResponse.json({ 
         error: `API Error: ${data.errors?.[0]?.message || response.statusText}`,
-        details: data 
+        status: response.status
       }, { status: response.status })
     }
     
