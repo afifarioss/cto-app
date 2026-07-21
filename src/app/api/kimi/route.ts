@@ -4,13 +4,13 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
-    // OpenRouter free Kimi endpoint
     const response = await fetch(
       'https://openrouter.ai/api/v1/chat/completions',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'HTTP-Referer': 'https://cto-app-tau.vercel.app',
           'X-Title': 'CTO Test App',
         },
