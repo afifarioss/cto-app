@@ -4,8 +4,9 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
+    // Try the correct Kimi model name
     const response = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/moonshotai/kimi-k2.6`,
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/moonshotai/kimi-k2`,
       {
         method: 'POST',
         headers: {
@@ -20,8 +21,17 @@ export async function POST(req: NextRequest) {
     )
     
     const data = await response.json()
+    
+    // Better error handling
+    if (!response.ok) {
+      return NextResponse.json({ 
+        error: `API Error: ${data.errors?.[0]?.message || response.statusText}`,
+        details: data 
+      }, { status: response.status })
+    }
+    
     return NextResponse.json({ 
-      response: data.result?.response || data.errors?.[0]?.message || 'No response' 
+      response: data.result?.response || 'No response from Kimi' 
     })
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
