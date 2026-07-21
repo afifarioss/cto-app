@@ -4,16 +4,18 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
-    // CORRECT Cloudflare Workers AI endpoint
+    // OpenRouter free Kimi endpoint
     const response = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/moonshotai/kimi-k2`,
+      'https://openrouter.ai/api/v1/chat/completions',
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
           'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://cto-app-tau.vercel.app',
+          'X-Title': 'CTO Test App',
         },
         body: JSON.stringify({
+          model: 'moonshotai/kimi-k2:free',
           messages: [{ role: 'user', content: message }],
           max_tokens: 512,
         }),
@@ -24,13 +26,12 @@ export async function POST(req: NextRequest) {
     
     if (!response.ok) {
       return NextResponse.json({ 
-        error: `API Error: ${data.errors?.[0]?.message || response.statusText}`,
-        status: response.status
+        error: `API Error: ${data.error?.message || response.statusText}`,
       }, { status: response.status })
     }
     
     return NextResponse.json({ 
-      response: data.result?.response || 'No response from Kimi' 
+      response: data.choices?.[0]?.message?.content || 'No response from Kimi' 
     })
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
