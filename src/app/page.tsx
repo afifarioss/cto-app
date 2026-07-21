@@ -3,132 +3,102 @@
 import { useState } from 'react'
 
 export default function Home() {
-  const [wallet, setWallet] = useState<string | null>(null)
-  const [balance, setBalance] = useState<string>('0.00')
+  const [message, setMessage] = useState('')
+  const [response, setResponse] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const connectWallet = async () => {
+  const sendMessage = async () => {
+    if (!message.trim()) return
+    
     setLoading(true)
-    // Simulated wallet connection (CDP integration coming next)
-    setTimeout(() => {
-      setWallet('0x7845D45d9E53268EBFf3C4a9daBb994cE5b93918')
-      setBalance('0.42')
-      setLoading(false)
-    }, 1000)
+    try {
+      const res = await fetch('/api/agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      })
+      const data = await res.json()
+      setResponse(data.response || data.error || 'No response')
+    } catch (error) {
+      setResponse('Error: ' + String(error))
+    }
+    setLoading(false)
   }
 
   return (
     <main style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+      background: '#0f172a',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '24px',
+      padding: '16px',
       fontFamily: 'system-ui, sans-serif'
     }}>
       <div style={{
         maxWidth: '480px',
         width: '100%',
         background: 'rgba(255,255,255,0.05)',
-        backdropFilter: 'blur(12px)',
-        borderRadius: '24px',
-        padding: '32px',
-        border: '1px solid rgba(255,255,255,0.1)',
-        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)'
+        borderRadius: '16px',
+        padding: '24px',
+        border: '1px solid rgba(255,255,255,0.1)'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: '700', color: 'white', marginBottom: '8px' }}>
-            ⛓️ CTO Base
-          </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px' }}>
-            Base Sepolia • Wallet Dashboard
-          </p>
-        </div>
-
-        {!wallet ? (
+        <h1 style={{ fontSize: '24px', fontWeight: '700', color: 'white', marginBottom: '4px' }}>
+          🤖 Virtuals Agent
+        </h1>
+        <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '20px' }}>
+          Powered by Kimi K3 on Virtuals
+        </p>
+        
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Ask anything..."
+            style={{
+              flex: 1,
+              padding: '12px',
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '10px',
+              color: 'white',
+              fontSize: '16px',
+              outline: 'none'
+            }}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          />
           <button
-            onClick={connectWallet}
+            onClick={sendMessage}
             disabled={loading}
             style={{
-              width: '100%',
-              padding: '16px',
+              padding: '12px 20px',
               background: loading ? '#334155' : '#3b82f6',
               color: 'white',
               border: 'none',
-              borderRadius: '12px',
+              borderRadius: '10px',
               fontSize: '16px',
               fontWeight: '600',
-              cursor: loading ? 'default' : 'pointer',
-              transition: 'all 0.2s'
+              cursor: loading ? 'default' : 'pointer'
             }}
           >
-            {loading ? 'Connecting...' : '🔗 Connect Wallet'}
+            {loading ? '...' : 'Send'}
           </button>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{
-              background: 'rgba(255,255,255,0.05)',
-              borderRadius: '12px',
-              padding: '16px',
-              border: '1px solid rgba(255,255,255,0.05)'
-            }}>
-              <p style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Wallet Address
-              </p>
-              <p style={{ color: 'white', fontFamily: 'monospace', fontSize: '14px', marginTop: '4px' }}>
-                {wallet.slice(0, 6)}...{wallet.slice(-4)}
-              </p>
-            </div>
-
-            <div style={{
-              background: 'rgba(255,255,255,0.05)',
-              borderRadius: '12px',
-              padding: '16px',
-              border: '1px solid rgba(255,255,255,0.05)'
-            }}>
-              <p style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Balance (Base Sepolia)
-              </p>
-              <p style={{ color: '#4ade80', fontSize: '24px', fontWeight: '700', marginTop: '4px' }}>
-                {balance} ETH
-              </p>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-              <button style={{
-                padding: '12px',
-                background: 'rgba(255,255,255,0.05)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '10px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}>
-                📤 Send
-              </button>
-              <button style={{
-                padding: '12px',
-                background: 'rgba(255,255,255,0.05)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '10px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}>
-                📊 History
-              </button>
-            </div>
+        </div>
+        
+        {response && (
+          <div style={{
+            marginTop: '16px',
+            background: 'rgba(255,255,255,0.05)',
+            borderRadius: '10px',
+            padding: '16px',
+            border: '1px solid rgba(255,255,255,0.05)',
+            whiteSpace: 'pre-wrap',
+            color: '#e2e8f0'
+          }}>
+            {response}
           </div>
         )}
-
-        <div style={{ marginTop: '24px', textAlign: 'center' }}>
-          <p style={{ color: '#475569', fontSize: '12px' }}>
-            Base Sepolia Testnet • Powered by CDP SDK
-          </p>
-        </div>
       </div>
     </main>
   )
