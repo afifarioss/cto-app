@@ -1,8 +1,17 @@
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">CTO Test App</h1>
-      <p className="mt-4 text-xl">Deployed from Termux ✅</p>
+    <main style={{ 
+      display: 'flex', 
+      minHeight: '100vh', 
+      flexDirection: 'column',
+      alignItems: 'center', 
+      justifyContent: 'center',
+      padding: '24px',
+      fontFamily: 'sans-serif'
+    }}>
+      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>CTO Test App</h1>
+      <p style={{ marginTop: '16px', fontSize: '1.25rem' }}>✅ Base + AI Ready</p>
+      <p style={{ marginTop: '8px', color: '#666' }}>GitHub • Vercel • AI Team</p>
     </main>
   )
 }
