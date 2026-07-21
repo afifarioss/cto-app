@@ -8,6 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
 
   const sendMessage = async () => {
+    if (!message.trim()) return
     
     setLoading(true)
     try {
@@ -35,9 +36,12 @@ export default function Home() {
       fontFamily: 'sans-serif'
     }}>
       <div style={{ maxWidth: '600px', width: '100%' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px' }}>
           🤖 Kimi AI Agent
         </h1>
+        <p style={{ textAlign: 'center', color: '#666', marginBottom: '24px', fontSize: '14px' }}>
+          Powered by Google Gemma 2 (free tier)
+        </p>
         
         <div style={{ background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -82,7 +86,7 @@ export default function Home() {
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             whiteSpace: 'pre-wrap'
           }}>
-            <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Kimi says:</p>
+            <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Kimi (via Gemma) says:</p>
             <p>{response}</p>
           </div>
         )}

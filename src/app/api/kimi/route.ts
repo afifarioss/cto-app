@@ -4,6 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
+    // Using Google's Gemma 2 - free and works well
     const response = await fetch(
       'https://openrouter.ai/api/v1/chat/completions',
       {
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
           'X-Title': 'CTO Test App',
         },
         body: JSON.stringify({
-          model: 'moonshotai/kimi-k2:free',
+          model: 'google/gemma-2-9b-it:free',
           messages: [{ role: 'user', content: message }],
           max_tokens: 512,
         }),
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
     
     return NextResponse.json({ 
-      response: data.choices?.[0]?.message?.content || 'No response from Kimi' 
+      response: data.choices?.[0]?.message?.content || 'No response' 
     })
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
