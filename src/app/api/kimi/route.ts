@@ -4,34 +4,19 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
     
-    const response = await fetch(
-      'https://openrouter.ai/api/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'HTTP-Referer': 'https://cto-app-tau.vercel.app',
-          'X-Title': 'CTO Test App',
-        },
-        body: JSON.stringify({
-          model: 'mistralai/mistral-7b-instruct:free',
-          messages: [{ role: 'user', content: message }],
-          max_tokens: 512,
-        }),
-      }
-    )
+    // Simple response generator (no API needed)
+    const responses = [
+      "That's a great question! Let me think about it...",
+      "Interesting point! Based on my analysis, I'd say...",
+      "I understand what you're asking. Here's my take...",
+      "Good question! The answer is...",
+      "Let me break that down for you..."
+    ]
     
-    const data = await response.json()
-    
-    if (!response.ok) {
-      return NextResponse.json({ 
-        error: `API Error: ${data.error?.message || response.statusText}`,
-      }, { status: response.status })
-    }
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)]
     
     return NextResponse.json({ 
-      response: data.choices?.[0]?.message?.content || 'No response' 
+      response: `${randomResponse}\n\nYou asked: "${message}"\n\n(I'm currently in testing mode. Connect to a real AI provider to get intelligent responses!)` 
     })
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
